@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMONTOK - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/perwakilan.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='image/logo_kapustik2.png') }}" alt="SIMONTOK Logo">
+            </div>
+
+            <nav class="main-nav">
+                <ul>
+                    <li class="{% if request.path == url_for('dashboard') %}active{% endif %}">
+                        <a href="{{ url_for('dashboard') }}">
+                            <span class="material-icons">dashboard</span>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="{% if request.path == url_for('list_perwakilan') %}active{% endif %}">
+                        <a href="{{ url_for('list_perwakilan') }}">
+                            <span class="material-icons">account_balance</span>
+                            <span>Data Perwakilan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('list_kepri') }}">
+                            <span class="material-icons">table_chart</span>
+                            <span>Tabel Kepri</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="material-icons">people</span>
+                            <span>Tabel Personel</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="material-icons">person</span>
+                            <span>Tabel Pegawai Setempat</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="material-icons">logout</span>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <header class="main-header">
+                <h1>{% block title %}Dashboard{% endblock %}</h1>
+                <div class="user-profile">
+                    <span class="username">{{ session.username }}</span>
+                    <span class="material-icons">account_circle</span>
+                </div>
+            </header>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Main Content Block -->
+            <main class="content-container">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>
