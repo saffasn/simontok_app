@@ -1,0 +1,161 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Data KEPPRI{% endblock %}
+
+{% block content %}
+
+<div class="perwakilan-container">
+    <div class="card">
+        <div class="card-body">
+            <!-- Search and Add Button Section -->
+            <div class="search-action-container">
+                <form method="GET" action="{{ url_for('list_kepri') }}" class="search-form">
+                    <input type="text" 
+                           name="search" 
+                           placeholder="Cari Data KEPPRI..." 
+                           class="search-input"
+                           value="{{ search if search }}">
+                    <button type="submit" class="search-button">
+                        <i class="material-icons">search</i>
+                    </button>
+                </form>
+                <a href="{{ url_for('create_kepri') }}" class="btn btn-add">
+                    <i class="material-icons">add</i> Tambah Data
+                </a>
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="export-buttons">
+                        <a href="{{ url_for('export_kepri_pdf', search=search, sort=sort_column, dir=sort_direction) }}">
+                            <button class="btn-export btn-pdf">
+                                <i class="material-icons">picture_as_pdf</i> PDF
+                            </button>
+                        </a>
+                        <a href="{{ url_for('export_kepri_excel', search=search, sort=sort_column, dir=sort_direction) }}">
+                            <button class="btn-export btn-excel">
+                                <i class="material-icons">grid_on</i> Excel
+                            </button>
+                        </a>
+                    </div>
+            
+            <!-- Data Table with Pagination -->
+            <div class="table-responsive">
+                <table class="perwakilan-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Perwakilan</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_kepri', search=search, page=page, sort='perwakilan', dir='asc') }}" class="sort-arrow {% if sort_column == 'perwakilan' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_kepri', search=search, page=page, sort='perwakilan', dir='desc') }}" class="sort-arrow {% if sort_column == 'perwakilan' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Nama</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_kepri', search=search, page=page, sort='nama', dir='asc') }}" class="sort-arrow {% if sort_column == 'nama' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_kepri', search=search, page=page, sort='nama', dir='desc') }}" class="sort-arrow {% if sort_column == 'nama' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Tahun</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_kepri', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_kepri', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>Status</th>
+                            <th>Keterangan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if kepri_list %}
+                            {% for item in kepri_list %}
+                            <tr>
+                                <td>{{ loop.index + (page - 1) * per_page }}</td>
+                                <td>{{ item[4] }}</td>  <!-- Perwakilan -->
+                                <td>{{ item[1] }}</td>  <!-- Nama -->
+                                <td>{{ item[2] }}</td>  <!-- Tahun -->
+                                <td>{{ 'Aktif' if item[5] == 1 else 'Inaktif' }}</td>  <!-- Status -->
+                                <td>{{ item[6] }}</td>  
+                                <td class="actions">
+                                    <a href="{{ url_for('edit_kepri', no=item[0]) }}" class="btn-edit">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                    <form action="{{ url_for('delete_kepri', no=item[0]) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn-delete" onclick="return confirm('Hapus data ini?')">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    Tidak ada data KEPPRI
+                                    {% if search %} untuk pencarian "{{ search }}"{% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    Showing {{ (page - 1) * per_page + 1 }} to {{ [page * per_page, total]|min }} of {{ total }} entries
+                </div>
+                <div class="pagination-controls">
+                    {% if page > 1 %}
+                        <a href="{{ url_for('list_kepri', page=page-1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                            Previous
+                        </a>
+                    {% else %}
+                        <span class="pagination-button disabled">Previous</span>
+                    {% endif %}
+
+                    {% for p in range(1, total_pages + 1) %}
+                        {% if p == page %}
+                            <span class="pagination-button active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('list_kepri', page=p, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                                {{ p }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                        <a href="{{ url_for('list_kepri', page=page+1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                            Next
+                        </a>
+                    {% else %}
+                        <span class="pagination-button disabled">Next</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

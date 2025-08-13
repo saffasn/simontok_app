@@ -1,0 +1,128 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Data Jenis Sistem{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_jenis_sistem') }}" id="jenisSistemForm">
+                <div class="form-row">
+                    <!-- Checkbox All Perwakilan -->
+                    <div class="form-group col-md-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="all_perwakilan" name="all_perwakilan" 
+                                {% if session.get('role') != 0 %}disabled{% endif %}>
+                            <label class="form-check-label" for="all_perwakilan">
+                                ALL PERWAKILAN
+                                {% if session.get('role') != 0 %}(Hanya untuk Admin){% endif %}
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown Perwakilan -->
+                    <div class="form-group col-md-6" id="perwakilan_container">
+                        <label for="trigram_pwk">Perwakilan</label>
+                        <select name="trigram_pwk" id="trigram_pwk" class="form-control" required>
+                            {% for pwk in perwakilan_list %}
+                            <option value="{{ pwk[0] }}"
+                                {% if form_data and form_data.trigram_pwk == pwk[0] %}selected{% endif %}>
+                                {{ pwk[1] }} ({{ pwk[0] }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Jenis Sistem dan Kategori -->
+                    <div class="form-group col-md-6">
+                        <label for="jenis">Jenis Sistem *</label>
+                        <input type="text" name="jenis" id="jenis" class="form-control" required
+                               value="{{ form_data.jenis if form_data }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="kategori">Kategori *</label>
+                        <select name="kategori" id="kategori" class="form-control" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            {% for option in kategori_options %}
+                            <option value="{{ option }}"
+                                {% if form_data and form_data.kategori == option %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Lembar dan Format Nomor -->
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="lembar">Jumlah Lembar</label>
+                        <input type="number" name="lembar" id="lembar" class="form-control"
+                               value="{{ form_data.lembar if form_data }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="format_nomor">Format Nomor</label>
+                        <input type="text" name="format_nomor" id="format_nomor" class="form-control"
+                               value="{{ form_data.format_nomor if form_data }}">
+                    </div>
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_jenis_sistem') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const allPerwakilanCheckbox = document.getElementById('all_perwakilan');
+    const perwakilanContainer = document.getElementById('perwakilan_container');
+    const trigramPwkSelect = document.getElementById('trigram_pwk');
+    const form = document.getElementById('jenisSistemForm');
+
+    // Hanya jalankan jika user adalah admin
+    {% if session.get('role') == 0 %}
+    // Handler untuk perubahan checkbox
+    function handleAllPerwakilanChange() {
+        if (allPerwakilanCheckbox.checked) {
+            // Sembunyikan dropdown dan nonaktifkan validasi
+            perwakilanContainer.style.display = 'none';
+            trigramPwkSelect.disabled = true;
+            trigramPwkSelect.removeAttribute('required');
+            
+            // Pastikan nilai ALL terkirim
+            if (!document.getElementById('all_perwakilan_hidden')) {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'trigram_pwk';
+                hiddenInput.id = 'all_perwakilan_hidden';
+                hiddenInput.value = 'ALL';
+                form.appendChild(hiddenInput);
+            }
+        } else {
+            // Tampilkan dropdown dan aktifkan validasi
+            perwakilanContainer.style.display = 'block';
+            trigramPwkSelect.disabled = false;
+            trigramPwkSelect.setAttribute('required', 'required');
+            
+            // Hapus input hidden jika ada
+            const hiddenInput = document.getElementById('all_perwakilan_hidden');
+            if (hiddenInput) {
+                form.removeChild(hiddenInput);
+            }
+        }
+    }
+
+    // Inisialisasi state awal
+    handleAllPerwakilanChange();
+    
+    // Tambahkan event listener
+    allPerwakilanCheckbox.addEventListener('change', handleAllPerwakilanChange);
+    {% endif %}
+});
+</script>
+{% endblock %}

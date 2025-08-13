@@ -1,0 +1,35 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Edit Data Tipe Palsan{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('edit_tipe_palsan', id_tipe=tipe[0]) }}">
+                <div class="form-row">
+                    <!-- ID Tipe (readonly) -->
+                    <div class="form-group col-md-6">
+                        <label for="id_tipe">ID Tipe</label>
+                        <input type="text" id="id_tipe" class="form-control" 
+                               value="{{ tipe[0] }}" readonly>
+                    </div>
+                    
+                    <!-- Nama Tipe -->
+                    <div class="form-group col-md-6">
+                        <label for="nama">Nama Tipe Palsan</label>
+                        <input type="text" name="nama" id="nama" class="form-control" required
+                               value="{{ tipe[1] }}">
+                    </div>
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_jenis_sistem') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

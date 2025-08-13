@@ -1,53 +1,53 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Tambah Data Perwakilan{% endblock %}
+{% block title %}Tambah Perwakilan{% endblock %}
 
 {% block content %}
-<div class="content-wrapper">
-    <section class="content">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <form method="POST" action="{{ url_for('create_perwakilan') }}">
-                    <div class="form-group">
-                        <label>Trigram</label>
-                        <input type="text" name="trigram" class="form-control" required 
-                               oninput="this.value = this.value.toUpperCase()"
-                               pattern="[A-Z]{3}" title="Harus 3 huruf kapital">
-                    </div>
-                    <div class="form-group">
-                        <label>Bigram</label>
-                        <input type="text" name="bigram" class="form-control" required 
-                               oninput="this.value = this.value.toUpperCase()"
-                               pattern="[A-Z]{2}" title="Harus 2 huruf kapital">
-                    </div>
-                    <div class="form-group">
-                        <label>Nama Perwakilan</label>
-                        <input type="text" name="nama_perwakilan" class="form-control" required
-                               oninput="this.value = this.value.toUpperCase()">
-                    </div>
-                    <div class="form-group">
-                        <label>Negara</label>
-                        <input type="text" name="negara" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Jenis PWK</label>
-                        <select name="jenis_pwk" class="form-control" required>
-                            <option value="">-- Pilih Jenis PWK --</option>
-                            {% for jenis in jenis_pwk_options %}
-                                <option value="{{ jenis }}">{{ jenis }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_perwakilan') }}">
+                <div class="form-group">
+                    <label for="trigram">Trigram</label>
+                    <input type="text" name="trigram" id="trigram" class="form-control" required
+                           oninput="this.value = this.value.toUpperCase()"
+                           pattern="[A-Z]{3}" title="Harus 3 huruf kapital">
+                </div>
 
-                    <button type="submit" class="btn btn-success">
-                        <i class="material-icons">save</i> Simpan
-                    </button>
-                    <a href="{{ url_for('list_perwakilan') }}" class="btn btn-secondary">
-                        <i class="material-icons">arrow_back</i> Kembali
-                    </a>
-                </form>
-            </div>
+                <div class="form-group">
+                    <label for="bigram">Bigram</label>
+                    <input type="text" name="bigram" id="bigram" class="form-control" required
+                           oninput="this.value = this.value.toUpperCase()"
+                           pattern="[A-Z]{2}" title="Harus 2 huruf kapital">
+                </div>
+
+                <div class="form-group">
+                    <label for="nama_perwakilan">Nama Perwakilan</label>
+                    <input type="text" name="nama_perwakilan" id="nama_perwakilan" class="form-control" required
+                           oninput="this.value = this.value.toUpperCase()">
+                </div>
+
+                <div class="form-group">
+                    <label for="negara">Negara</label>
+                    <input type="text" name="negara" id="negara" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="jenis_pwk">Jenis PWK</label>
+                    <select name="jenis_pwk" id="jenis_pwk" class="form-control" required>
+                        <option value="">-- Pilih Jenis PWK --</option>
+                        {% for jenis in jenis_pwk_options %}
+                            <option value="{{ jenis }}">{{ jenis }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_perwakilan') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
         </div>
-    </section>
+    </div>
 </div>
 {% endblock %}

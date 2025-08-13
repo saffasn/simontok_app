@@ -1,6 +1,6 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Data Personel{% endblock %}
+{% block title %}Data Pegawai Setempat{% endblock %}
 
 {% block content %}
 <div class="perwakilan-container">
@@ -8,29 +8,29 @@
         <div class="card-body">
             <!-- Search and Add Button Section -->
             <div class="search-action-container">
-                <form method="GET" action="{{ url_for('list_personel') }}" class="search-form">
+                <form method="GET" action="{{ url_for('list_pegawai_setempat') }}" class="search-form">
                     <input type="text" 
                            name="search" 
-                           placeholder="Cari Data Personel..." 
+                           placeholder="Cari Data Pegawai Setempat..." 
                            class="search-input"
                            value="{{ search if search }}">
                     <button type="submit" class="search-button">
                         <i class="material-icons">search</i>
                     </button>
                 </form>
-                <a href="{{ url_for('create_personel') }}" class="btn btn-add">
+                <a href="{{ url_for('create_pegawai_setempat') }}" class="btn btn-add">
                     <i class="material-icons">add</i> Tambah Data
                 </a>
             </div>
 
             <!-- Export Buttons -->
             <div class="export-buttons">
-                        <a href="{{ url_for('export_personel_pdf', search=search, sort=sort_column, dir=sort_direction) }}">
+                        <a href="{{ url_for('export_pegawai_setempat_pdf', search=search, sort=sort_column, dir=sort_direction) }}">
                             <button class="btn-export btn-pdf">
                                 <i class="material-icons">picture_as_pdf</i> PDF
                             </button>
                         </a>
-                        <a href="{{ url_for('export_personel_excel', search=search, sort=sort_column, dir=sort_direction) }}">
+                        <a href="{{ url_for('export_pegawai_setempat_excel', search=search, sort=sort_column, dir=sort_direction) }}">
                             <button class="btn-export btn-excel">
                                 <i class="material-icons">grid_on</i> Excel
                             </button>
@@ -60,10 +60,10 @@
                                 <div class="sortable-header">
                                     <span>Nama</span>
                                     <div class="sort-arrows">
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
                                             <i class="material-icons">arrow_drop_up</i>
                                         </a>
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
                                             <i class="material-icons">arrow_drop_down</i>
                                         </a>
                                     </div>
@@ -72,26 +72,12 @@
 
                             <th>
                                 <div class="sortable-header">
-                                    <span>NIP</span>
-                                     <div class="sort-arrows">
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
-                                            <i class="material-icons">arrow_drop_up</i>
-                                        </a>
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
-                                            <i class="material-icons">arrow_drop_down</i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </th>
-
-                            <th>
-                                <div class="sortable-header">
-                                    <span>Pangkat/Gol</span>
+                                    <span>Tempat/Tgl Lahir</span>
                                     <div class="sort-arrows">
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
                                             <i class="material-icons">arrow_drop_up</i>
                                         </a>
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
                                             <i class="material-icons">arrow_drop_down</i>
                                         </a>
                                     </div>
@@ -100,12 +86,12 @@
 
                             <th>
                                 <div class="sortable-header">
-                                    <span>Jabatan</span>
+                                    <span>NIK</span>
                                     <div class="sort-arrows">
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
                                             <i class="material-icons">arrow_drop_up</i>
                                         </a>
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
                                             <i class="material-icons">arrow_drop_down</i>
                                         </a>
                                     </div>
@@ -114,36 +100,54 @@
 
                             <th>
                                 <div class="sortable-header">
-                                    <span>Penempatan Ke-</span>
+                                    <span>TMT Penempatan</span>
                                     <div class="sort-arrows">
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
                                             <i class="material-icons">arrow_drop_up</i>
                                         </a>
-                                        <a href="{{ url_for('list_personel', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
                                             <i class="material-icons">arrow_drop_down</i>
                                         </a>
                                     </div>
                                 </div>
                             </th>
+
+                            <th>
+                                <div class="sortable-header">
+                                    <span>TMT Selesai</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_pegawai_setempat', search=search, page=page, sort='tahun', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% if personel_list %}
-                            {% for item in personel_list %}
+                        {% if pegawai_list %}
+                            {% for item in pegawai_list %}
                             <tr>
                                 <td>{{ loop.index + (page - 1) * per_page }}</td>
-                                <td>{{ item[11] }}</td>
+                                <td>{{ item[10] }}</td>
                                 <td>{{ item[1] }}</td>
-                                <td>{{ item[2] }}</td>
-                                <td>{{ item[3] }}</td>
-                                <td>{{ item[6] if item[6] else '-' }}</td>
-                                <td>{{ item[8] }}</td>
+                                <td>
+                                    {{ item[2] if item[2] }}, 
+                                    {{ item[3].strftime('%d-%m-%Y') if item[3] }}
+                                </td>
+                                <td>{{ item[4] if item[4] else '-' }}</td>
+                                <td>{{ item[7].strftime('%d-%m-%Y') if item[7] else '-' }}</td>
+                                <td>{{ item[8].strftime('%d-%m-%Y') if item[8] else '-' }}</td>
                                 <td class="actions">
-                                    <a href="{{ url_for('edit_personel', no=item[0]) }}" class="btn-edit">
+                                    <a href="{{ url_for('edit_pegawai_setempat', no=item[0]) }}" class="btn-edit">
                                         <i class="material-icons">edit</i>
                                     </a>
-                                    <form action="{{ url_for('delete_personel', no=item[0]) }}" method="POST" style="display: inline;">
+                                    <form action="{{ url_for('delete_pegawai_setempat', no=item[0]) }}" method="POST" style="display: inline;">
                                         <button type="submit" class="btn-delete" onclick="return confirm('Hapus data ini?')">
                                             <i class="material-icons">delete</i>
                                         </button>
@@ -153,8 +157,8 @@
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="7" class="text-center">
-                                    Tidak ada data personel
+                                <td colspan="8" class="text-center">
+                                    Tidak ada data pegawai setempat
                                     {% if search %} untuk pencarian "{{ search }}"{% endif %}
                                 </td>
                             </tr>
@@ -170,7 +174,7 @@
                 </div>
                 <div class="pagination-controls">
                     {% if page > 1 %}
-                        <a href="{{ url_for('list_personel', page=page-1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                        <a href="{{ url_for('list_pegawai_setempat', page=page-1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
                             Previous
                         </a>
                     {% else %}
@@ -181,14 +185,14 @@
                         {% if p == page %}
                             <span class="pagination-button active">{{ p }}</span>
                         {% else %}
-                            <a href="{{ url_for('list_personel', page=p, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                            <a href="{{ url_for('list_pegawai_setempat', page=p, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
                                 {{ p }}
                             </a>
                         {% endif %}
                     {% endfor %}
 
                     {% if page < total_pages %}
-                        <a href="{{ url_for('list_personel', page=page+1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                        <a href="{{ url_for('list_pegawai_setempat', page=page+1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
                             Next
                         </a>
                     {% else %}

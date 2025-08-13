@@ -1,0 +1,32 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Edit Jenis Pendidikan{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('edit_jenis_pendidikan', no=jenis_pendidikan[0]) }}">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="jenis_pend">Jenis Pendidikan</label>
+                        <select name="jenis_pend" id="jenis_pend" class="form-control" required>
+                            <option value="">-- Pilih Jenis Pendidikan --</option>
+                            <option value="umum" {% if jenis_pendidikan[1] == 'umum' %}selected{% endif %}>Umum</option>
+                            <option value="militer" {% if jenis_pendidikan[1] == 'militer' %}selected{% endif %}>Militer</option>
+                            <option value="pim" {% if jenis_pendidikan[1] == 'pim' %}selected{% endif %}>PIM</option>
+                            <option value="sandi" {% if jenis_pendidikan[1] == 'sandi' %}selected{% endif %}>Sandi</option>
+                            <option value="teknis" {% if jenis_pendidikan[1] == 'teknis' %}selected{% endif %}>Teknis</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ url_for('list_jenis_pendidikan') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

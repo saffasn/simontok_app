@@ -1,0 +1,143 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Data Pendidikan{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_pendidikan') }}" id="pendidikan-form">
+                <div class="form-group">
+                    <label>Personel</label>
+                    <select name="id_personel" id="id_personel" class="form-control" required>
+                        <option value="">-- Pilih Personel --</option>
+                        {% for personel in personel_list %}
+                        <option value="{{ personel[0] }}">{{ personel[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div id="pendidikan-entries-container">
+                    <!-- First education entry -->
+                    <div class="card mb-3 pendidikan-entry">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>Jenis Pendidikan</label>
+                                    <select name="jenis_pendidikan[]" class="form-control jenis-pendidikan" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        {% for jenis in jenis_pend_list %}
+                                        <option value="{{ jenis[0] }}">{{ jenis[1] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Jabatan</label>
+                                    <select name="jabatan[]" class="form-control jabatan">
+                                        <option value="">-- Pilih Jabatan --</option>
+                                        {% for jabatan in jabatan_list %}
+                                        <option value="{{ jabatan[0] }}">{{ jabatan[1] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Tahun</label>
+                                    <input type="number" name="tahun[]" class="form-control tahun" min="1900" max="2100" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Nama Pendidikan</label>
+                                <input type="text" name="nama_pendidikan[]" class="form-control nama-pendidikan" required>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-danger btn-sm remove-entry">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" id="add-new-entry" class="btn btn-secondary mb-3">
+                    <i class="material-icons">add</i> Tambah Pendidikan Baru
+                </button>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan Semua Data</button>
+                    <a href="{{ url_for('list_pendidikan') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let entryCount = 1;
+    
+    document.getElementById('add-new-entry').addEventListener('click', function() {
+        entryCount++;
+        
+        const container = document.getElementById('pendidikan-entries-container');
+        const newEntry = document.createElement('div');
+        newEntry.className = 'card mb-3 pendidikan-entry';
+        newEntry.innerHTML = `
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Jenis Pendidikan*</label>
+                        <select name="jenis_pendidikan[]" class="form-control jenis-pendidikan" required>
+                            <option value="">-- Pilih Jenis --</option>
+                            {% for jenis in jenis_pend_list %}
+                            <option value="{{ jenis[0] }}">{{ jenis[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Jabatan</label>
+                        <select name="jabatan[]" class="form-control jabatan">
+                            <option value="">-- Pilih Jabatan --</option>
+                            {% for jabatan in jabatan_list %}
+                            <option value="{{ jabatan[0] }}">{{ jabatan[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Tahun*</label>
+                        <input type="number" name="tahun[]" class="form-control tahun" min="1900" max="2100" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nama Pendidikan*</label>
+                    <input type="text" name="nama_pendidikan[]" class="form-control nama-pendidikan" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger btn-sm remove-entry">Hapus</button>
+                </div>
+            </div>
+        `;
+        
+        container.appendChild(newEntry);
+        
+        // Add event listener for remove button
+        newEntry.querySelector('.remove-entry').addEventListener('click', function() {
+            if (confirm('Hapus data pendidikan ini?')) {
+                container.removeChild(newEntry);
+            }
+        });
+    });
+
+    // Add event listeners for existing remove buttons
+    document.querySelectorAll('.remove-entry').forEach(button => {
+        button.addEventListener('click', function() {
+            if (confirm('Hapus data pendidikan ini?')) {
+                const entry = this.closest('.pendidikan-entry');
+                document.getElementById('pendidikan-entries-container').removeChild(entry);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

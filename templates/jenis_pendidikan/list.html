@@ -1,0 +1,102 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Data Jenis Pendidikan{% endblock %}
+
+{% block content %}
+<div class="perwakilan-container">
+    <div class="card">
+        <div class="card-body">
+            <!-- Search and Add Button Section -->
+            <div class="search-action-container">
+                <form method="GET" action="{{ url_for('list_jenis_pendidikan') }}" class="search-form">
+                    <input type="text" 
+                           name="search" 
+                           placeholder="Cari Data Jenis Pendidikan..." 
+                           class="search-input"
+                           value="{{ search if search }}">
+                    <button type="submit" class="search-button">
+                        <i class="material-icons">search</i>
+                    </button>
+                </form>
+                <a href="{{ url_for('create_jenis_pendidikan') }}" class="btn btn-add">
+                    <i class="material-icons">add</i> Tambah Data
+                </a>
+            </div>
+            
+            <!-- Data Table with Pagination -->
+            <div class="table-responsive">
+                <table class="perwakilan-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Jenis Pendidikan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if jenis_pendidikan_list %}
+                            {% for item in jenis_pendidikan_list %}
+                            <tr>
+                                <td>{{ loop.index + (page - 1) * per_page }}</td>
+                                <td>{{ item[1]|capitalize }}</td>
+                                <td class="actions">
+                                    <a href="{{ url_for('edit_jenis_pendidikan', no=item[0]) }}" class="btn-edit">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                    <form action="{{ url_for('delete_jenis_pendidikan', no=item[0]) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn-delete" onclick="return confirm('Hapus data ini?')">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center">
+                                    Tidak ada data jenis pendidikan
+                                    {% if search %} untuk pencarian "{{ search }}"{% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    Showing {{ (page - 1) * per_page + 1 }} to {{ [page * per_page, total]|min }} of {{ total }} entries
+                </div>
+                <div class="pagination-controls">
+                    {% if page > 1 %}
+                        <a href="{{ url_for('list_jenis_pendidikan', page=page-1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                            Previous
+                        </a>
+                    {% else %}
+                        <span class="pagination-button disabled">Previous</span>
+                    {% endif %}
+
+                    {% for p in range(1, total_pages + 1) %}
+                        {% if p == page %}
+                            <span class="pagination-button active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('list_jenis_pendidikan', page=p, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                                {{ p }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                        <a href="{{ url_for('list_jenis_pendidikan', page=page+1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                            Next
+                        </a>
+                    {% else %}
+                        <span class="pagination-button disabled">Next</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

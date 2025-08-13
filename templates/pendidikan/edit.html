@@ -1,0 +1,151 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Edit Data Pendidikan{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('edit_pendidikan', personel_id=personel_id) }}">
+                <div class="form-group">
+                    <label>Personel</label>
+                    <select name="id_personel" class="form-control" required>
+                        <option value="">-- Pilih Personel --</option>
+                        {% for personel in personel_list %}
+                        <option value="{{ personel[0] }}" {% if pendidikan_list[0][1] == personel[0] %}selected{% endif %}>{{ personel[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                {% for pendidikan in pendidikan_list %}
+                <div class="card mb-3 pendidikan-entry">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Tahun</label>
+                                <input type="number" name="pendidikan_{{ pendidikan[0] }}_tahun" 
+                                       class="form-control" min="1900" max="2100" 
+                                       value="{{ pendidikan[4] }}" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Jenis Pendidikan</label>
+                                <select name="pendidikan_{{ pendidikan[0] }}_jenis" class="form-control" required>
+                                    <option value="">-- Pilih Jenis --</option>
+                                    {% for jenis in jenis_pend_list %}
+                                    <option value="{{ jenis[0] }}" 
+                                            {% if pendidikan[3] == jenis[0] %}selected{% endif %}>
+                                        {{ jenis[1] }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Jabatan</label>
+                                <select name="pendidikan_{{ pendidikan[0] }}_jabatan" class="form-control">
+                                    <option value="">-- Pilih Jabatan --</option>
+                                    {% for jabatan in jabatan_list %}
+                                    <option value="{{ jabatan[0] }}" 
+                                            {% if pendidikan[2] == jabatan[0] %}selected{% endif %}>
+                                        {{ jabatan[1] }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Nama Pendidikan</label>
+                            <input type="text" name="pendidikan_{{ pendidikan[0] }}_nama" 
+                                   class="form-control" value="{{ pendidikan[5] }}" required>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" name="pendidikan_{{ pendidikan[0] }}_update" 
+                                    class="btn btn-primary btn-sm">Update</button>
+                            <button type="submit" name="pendidikan_{{ pendidikan[0] }}_delete" 
+                                    class="btn btn-danger btn-sm" 
+                                    onclick="return confirm('Hapus data ini?')">Hapus</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <div id="new-entries-container">
+                    <!-- New entries will be added here -->
+                </div>
+                
+                <button type="button" id="add-new-entry" class="btn btn-secondary mb-3">
+                    <i class="material-icons">add</i> Tambah Pendidikan Baru
+                </button>
+                
+                <input type="hidden" id="new-entry-count" name="new_entry_count" value="0">
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan Semua Perubahan</button>
+                    <a href="{{ url_for('list_pendidikan') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let entryCount = 0;
+    
+    document.getElementById('add-new-entry').addEventListener('click', function() {
+        entryCount++;
+        document.getElementById('new-entry-count').value = entryCount;
+        
+        const container = document.getElementById('new-entries-container');
+        const newEntry = document.createElement('div');
+        newEntry.className = 'card mb-3 new-entry';
+        newEntry.innerHTML = `
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Tahun*</label>
+                        <input type="number" name="new_${entryCount}_tahun" 
+                               class="form-control" min="1900" max="2100" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Jenis Pendidikan*</label>
+                        <select name="new_${entryCount}_jenis" class="form-control" required>
+                            <option value="">-- Pilih Jenis --</option>
+                            {% for jenis in jenis_pend_list %}
+                            <option value="{{ jenis[0] }}">{{ jenis[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Jabatan</label>
+                        <select name="new_${entryCount}_jabatan" class="form-control">
+                            <option value="">-- Pilih Jabatan --</option>
+                            {% for jabatan in jabatan_list %}
+                            <option value="{{ jabatan[0] }}">{{ jabatan[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nama Pendidikan*</label>
+                    <input type="text" name="new_${entryCount}_nama" class="form-control" required>
+                </div>
+                
+                <button type="button" class="btn btn-danger btn-sm remove-entry">Hapus</button>
+            </div>
+        `;
+        
+        container.appendChild(newEntry);
+        
+        // Add event listener for remove button
+        newEntry.querySelector('.remove-entry').addEventListener('click', function() {
+            container.removeChild(newEntry);
+            entryCount--;
+            document.getElementById('new-entry-count').value = entryCount;
+        });
+    });
+});
+</script>
+{% endblock %}

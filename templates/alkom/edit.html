@@ -1,0 +1,135 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Edit Data Alkom{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('edit_alkom', no=alkom[0]) }}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="perwakilan">Perwakilan</label>
+                        <select name="perwakilan" id="perwakilan" class="form-control" required>
+                            {% for pwk in perwakilan_list %}
+                            <option value="{{ pwk[0] }}"
+                                {% if alkom[1] == pwk[0] %}selected{% endif %}>
+                                {{ pwk[1] }} ({{ pwk[0] }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="provider">Provider *</label>
+                        <input type="text" name="provider" id="provider" class="form-control"
+                               value="{{ alkom[2] if alkom[2] }}" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="jenis_telpon_satelit">Jenis Telpon Satelit *</label>
+                        <input type="text" name="jenis_telpon_satelit" id="jenis_telpon_satelit" class="form-control"
+                               value="{{ alkom[3] if alkom[3] }}" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="nomor_telp_satelit">Nomor Telp Satelit *</label>
+                        <input type="text" name="nomor_telp_satelit" id="nomor_telp_satelit" class="form-control"
+                               value="{{ alkom[4] if alkom[4] }}" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="status_alkom">Status Alkom *</label>
+                        <select name="status_alkom" id="status_alkom" class="form-control" required>
+                            {% for option in status_options %}
+                            <option value="{{ option }}"
+                                {% if alkom[5] == option %}selected{% endif %}>
+                                {{ option|capitalize }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="fasilitas_internet">Fasilitas Internet</label>
+                        <select name="fasilitas_internet" id="fasilitas_internet" class="form-control">
+                            {% for option in fasilitas_options %}
+                            <option value="{{ option }}"
+                                {% if alkom[6] == option %}selected{% endif %}>
+                                {{ option|capitalize }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="status_langganan">Status Langganan</label>
+                        <select name="status_langganan" id="status_langganan" class="form-control">
+                            {% for option in langganan_options %}
+                            <option value="{{ option }}"
+                                {% if alkom[7] == option %}selected{% endif %}>
+                                {{ option|capitalize }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="pengadaan">Pengadaan</label>
+                        <select name="pengadaan" id="pengadaan" class="form-control">
+                            {% for option in pengadaan_options %}
+                            <option value="{{ option }}"
+                                {% if alkom[8] == option %}selected{% endif %}>
+                                {{ option|capitalize }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="tahun_pengadaan">Tahun Pengadaan</label>
+                        <input type="number" name="tahun_pengadaan" id="tahun_pengadaan" class="form-control"
+                               value="{{ alkom[9] if alkom[9] }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="pencatatan_BMN">Pencatatan BMN</label>
+                        <select name="pencatatan_BMN" id="pencatatan_BMN" class="form-control">
+                            {% for option in bmn_options %}
+                            <option value="{{ option }}"
+                                {% if alkom[10] == option %}selected{% endif %}>
+                                {{ option|capitalize }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="no_bmn">Nomor BMN</label>
+                            <input type="text" name="no_bmn" id="no_bmn" class="form-control"
+                                value="{{ alkom[12] if alkom[12] }}" maxlength="20">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="tahun_pencatatan">Tahun Pencatatan</label>
+                        <input type="number" name="tahun_pencatatan" id="tahun_pencatatan" class="form-control"
+                               value="{{ alkom[11] if alkom[11] }}">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ url_for('list_alkom') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

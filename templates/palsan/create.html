@@ -1,0 +1,101 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Data Palsan{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-row">
+                    <div class="form-row">
+                    <div class="form-group col-md-6">
+                            <label for="id_pwk">Perwakilan</label>
+                            <select name="id_pwk" id="id_pwk" class="form-control" required>
+                                {% for pwk in perwakilan_list %}
+                                    <option value="{{ pwk[0] }}" 
+                                        {% if form_data and form_data.id_pwk == pwk[0] %}selected{% endif %}>
+                                        {{ pwk[1] }} ({{ pwk[0] }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="id_tipe">Tipe Palsan</label>
+                        <select name="id_tipe" id="id_tipe" class="form-control" required>
+                            <option value="">-- Pilih Tipe --</option>
+                            {% for tipe in tipe_palsan_list %}
+                            <option value="{{ tipe[0] }}"
+                                {% if form_data and form_data.id_tipe == tipe[0] %}selected{% endif %}>
+                                {{ tipe[1] }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Serial Number -->
+                    <div class="form-group col-md-6">
+                        <label for="serial_number">Serial Number</label>
+                        <input type="text" name="serial_number" id="serial_number" 
+                               class="form-control" required
+                               value="{{ form_data.serial_number if form_data else '' }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <!-- Pengadaan -->
+                    <div class="form-group col-md-6">
+                        <label for="pengadaan">Pengadaan</label>
+                        <select name="pengadaan" id="pengadaan" class="form-control" required>
+                            <option value="pusat" selected>Pusat</option>
+                            <option value="perwakilan">Perwakilan</option>
+                        </select>
+                    </div>
+
+                    <!-- Tahun Pengadaan -->
+                    <div class="form-group col-md-6">
+                        <label for="tahun_pengadaan">Tahun Pengadaan</label>
+                        <input type="date" name="tahun_pengadaan" id="tahun_pengadaan" 
+                               class="form-control"
+                               value="{{ form_data.tahun_pengadaan if form_data else '' }}">
+                    </div>
+
+                    <!-- Pencatatan -->
+                    <div class="form-group col-md-6">
+                        <label for="Pencatatan">Pencatatan</label>
+                        <select name="Pencatatan" id="Pencatatan" class="form-control" required>
+                            <option value="pusat" selected>Pusat</option>
+                            <option value="perwakilan">Perwakilan</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Tahun Pengadaan -->
+                    <div class="form-group col-md-6">
+                        <label for="tahun_pencatatan">Tahun Pencatatan</label>
+                        <input type="date" name="tahun_pencatatan" id="tahun_pencatatan" 
+                               class="form-control"
+                               value="{{ form_data.tahun_pencatatan if form_data else '' }}">
+                    </div>
+                </div>
+
+                <!-- Status -->
+                    <div class="form-group col-md-6">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="Aktif" selected>Aktif</option>
+                            <option value="Non-Aktif">Non-Aktif</option>
+                        </select>
+                    </div>
+
+                <!-- Tombol Aksi -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_jenis_sistem') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

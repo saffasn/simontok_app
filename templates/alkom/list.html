@@ -1,0 +1,263 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Data Alkom{% endblock %}
+
+{% block content %}
+<div class="perwakilan-container">
+    <div class="card">
+        <div class="card-body">
+            <!-- Search and Action Buttons Section -->
+            <div class="search-action-container">
+                <form method="GET" action="{{ url_for('list_alkom') }}" class="search-form">
+                    <input type="text" 
+                           name="search" 
+                           placeholder="Cari Data Alkom..." 
+                           class="search-input"
+                           value="{{ search if search }}">
+                    <button type="submit" class="search-button">
+                        <i class="material-icons">search</i>
+                    </button>
+                </form>
+                
+                <div class="action-buttons">
+                    <a href="{{ url_for('create_alkom') }}" class="btn btn-add">
+                        <i class="material-icons">add</i> Tambah Data
+                    </a>
+                </div>
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="export-buttons">
+                        <a href="{{ url_for('export_alkom_pdf', search=search, sort=sort_column, dir=sort_direction) }}">
+                            <button class="btn-export btn-pdf">
+                                <i class="material-icons">picture_as_pdf</i> PDF
+                            </button>
+                        </a>
+                        <a href="{{ url_for('export_alkom_excel', search=search, sort=sort_column, dir=sort_direction) }}">
+                            <button class="btn-export btn-excel">
+                                <i class="material-icons">grid_on</i> Excel
+                            </button>
+                        </a>
+                    </div>
+
+            
+            <!-- Data Table with Pagination -->
+            <div class="table-responsive">
+                <table class="perwakilan-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            
+                            {% if session.get('role') == 0 %}  <!-- Only show for admin -->
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Perwakilan</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='perwakilan', dir='asc') }}" class="sort-arrow {% if sort_column == 'perwakilan' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='perwakilan', dir='desc') }}" class="sort-arrow {% if sort_column == 'perwakilan' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+                            {% endif %}
+                            
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Provider</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='provider', dir='asc') }}" class="sort-arrow {% if sort_column == 'provider' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='provider', dir='desc') }}" class="sort-arrow {% if sort_column == 'provider' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Jenis Telpon Satelit</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='jenis_telpon_satelit', dir='asc') }}" class="sort-arrow {% if sort_column == 'jenis_telpon_satelit' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='jenis_telpon_satelit', dir='desc') }}" class="sort-arrow {% if sort_column == 'jenis_telpon_satelit' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Nomor Telp Satelit</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='nomor_telp_satelit', dir='asc') }}" class="sort-arrow {% if sort_column == 'nomor_telp_satelit' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='nomor_telp_satelit', dir='desc') }}" class="sort-arrow {% if sort_column == 'nomor_telp_satelit' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Status Alkom</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='status_alkom', dir='asc') }}" class="sort-arrow {% if sort_column == 'status_alkom' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='status_alkom', dir='desc') }}" class="sort-arrow {% if sort_column == 'status_alkom' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Fasilitas Internet</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='fasilitas_internet', dir='asc') }}" class="sort-arrow {% if sort_column == 'fasilitas_internet' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='fasilitas_internet', dir='desc') }}" class="sort-arrow {% if sort_column == 'fasilitas_internet' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Pengadaan</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='tahun_pengadaan', dir='asc') }}" class="sort-arrow {% if sort_column == 'tahun_pengadaan' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='tahun_pengadaan', dir='desc') }}" class="sort-arrow {% if sort_column == 'tahun_pengadaan' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="sortable-header">
+                                    <span>Pencatatan BMN</span>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="sortable-header">
+                                    <span>No BMN</span>
+                                    <div class="sort-arrows">
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='no_bmn', dir='asc') }}" class="sort-arrow {% if sort_column == 'no_bmn' and sort_direction == 'asc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_up</i>
+                                        </a>
+                                        <a href="{{ url_for('list_alkom', search=search, page=page, sort='no_bmn', dir='desc') }}" class="sort-arrow {% if sort_column == 'no_bmn' and sort_direction == 'desc' %}active{% endif %}">
+                                            <i class="material-icons">arrow_drop_down</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if alkom_list %}
+                            {% for item in alkom_list %}
+                            <tr>
+                                <td>{{ loop.index + (page - 1) * per_page }}</td>
+                                
+                                {% if session.get('role') == 0 %}  <!-- Only show for admin -->
+                                <td>{{ item[13] if item[13] else item[12] }}</td>
+                                {% endif %}
+                                
+                                <td>{{ item[1] if item[1] else '-' }}</td>
+                                <td>{{ item[2] if item[2] else '-' }}</td>
+                                <td>{{ item[3] if item[3] else '-' }}</td>
+                                <td>
+                                    <span class="status-badge {{ 'active' if item[4] == 'aktif' else 'inactive' }}">
+                                        {{ item[4]|capitalize if item[4] else '-' }}
+                                    </span>
+                                </td>
+                                <td>{{ item[5]|capitalize if item[5] else '-' }}</td>
+                                <td>
+                                    {{ item[7]|capitalize if item[7] else '-' }}<br>
+                                    <small>{{ item[8] if item[8] else '' }}</small>
+                                </td>
+                                <td>
+                                    {{ item[9]|capitalize if item[9] else '-' }}<br>
+                                    <small>{{ item[10] if item[10] else '' }}</small>
+                                </td>
+                                <td>{{ item[11] if item[11] else '-' }}</td> <!-- No BMN -->
+                                <td class="actions">
+                                    <a href="{{ url_for('edit_alkom', no=item[0]) }}" class="btn-edit">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                    <form action="{{ url_for('delete_alkom', no=item[0]) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn-delete" onclick="return confirm('Hapus data ini?')">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <!-- Adjust colspan based on whether user is admin -->
+                                <td colspan="{% if session.get('role') == 0 %}12{% else %}11{% endif %}" class="text-center">
+                                    Tidak ada data Alkom
+                                    {% if search %} untuk pencarian "{{ search }}"{% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    Menampilkan {{ (page - 1) * per_page + 1 }} sampai {{ [page * per_page, total]|min }} dari {{ total }} data
+                </div>
+                <div class="pagination-controls">
+                    {% if page > 1 %}
+                        <a href="{{ url_for('list_alkom', page=page-1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                            Sebelumnya
+                        </a>
+                    {% else %}
+                        <span class="pagination-button disabled">Sebelumnya</span>
+                    {% endif %}
+
+                    {% for p in range(1, total_pages + 1) %}
+                        {% if p == page %}
+                            <span class="pagination-button active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('list_alkom', page=p, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                                {{ p }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                        <a href="{{ url_for('list_alkom', page=page+1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                            Selanjutnya
+                        </a>
+                    {% else %}
+                        <span class="pagination-button disabled">Selanjutnya</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

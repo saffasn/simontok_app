@@ -1,0 +1,124 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Edit Data Personel{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('edit_personel', no=personel[0]) }}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="id_pwk">Perwakilan</label>
+                        <select name="id_pwk" id="id_pwk" class="form-control">
+                            {% for pwk in perwakilan_list %}
+                            <option value="{{ pwk[0] }}" {% if personel[15] == pwk[0] %}selected{% endif %}>
+                                {{ pwk[1] }} ({{ pwk[0] }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="nama">Nama Lengkap</label>
+                        <input type="text" name="nama" id="nama" class="form-control" value="{{ personel[1] }}" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="nip">NIP</label>
+                        <input type="text" name="nip" id="nip" class="form-control"  maxlength="18"
+                         value="{{ personel[4] if personel[4] }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="t_lahir">Tempat Lahir</label>
+                        <input type="text" name="t_lahir" id="t_lahir" class="form-control" value="{{ personel[2] if personel[2] }}">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="tgl_lahir">Tanggal Lahir</label>
+                        <input type="date" name="tgl_lahir" id="tgl_lahir" class="form-control short-date" 
+                               value="{{ personel[3].strftime('%Y-%m-%d') if personel[3] }}">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="pangkat_gol">Pangkat/Golongan</label>
+                        <select name="pangkat_gol" id="pangkat_gol" class="form-control">
+                            <option value="">-- Pilih Pangkat/Golongan --</option>
+                            {% for pangkat in pangkat_golongan %}
+                            <option value="{{ pangkat }}" {% if personel[5] == pangkat %}selected{% endif %}>{{ pangkat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="tmt_pangkat">TMT Pangkat</label>
+                        <input type="date" name="tmt_pangkat" id="tmt_pangkat" class="form-control short-date" 
+                               value="{{ personel[6].strftime('%Y-%m-%d') if personel[6] }}">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="id_jabatan">Jabatan</label>
+                        <select name="id_jabatan" id="id_jabatan" class="form-control">
+                            <option value="">-- Pilih Jabatan --</option>
+                            {% for jabatan in jabatan_list %}
+                            <option value="{{ jabatan[0] }}" {% if personel[7] == jabatan[0] %}selected{% endif %}>{{ jabatan[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="tmt_jabatan">TMT Jabatan</label>
+                        <input type="date" name="tmt_jabatan" id="tmt_jabatan" class="form-control short-date" 
+                               value="{{ personel[8].strftime('%Y-%m-%d') if personel[8] }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="penempatan">Penempatan Ke-</label>
+                        <select name="penempatan" id="penempatan" class="form-control">
+                            <option value="">-- Pilih Penempatan --</option>
+                            {% for p in penempatan_options %}
+                            <option value="{{ p }}" {% if personel[9] == p %}selected{% endif %}>{{ p }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="tmt_penempatan">TMT Penempatan</label>
+                        <input type="date" name="tmt_penempatan" id="tmt_penempatan" class="form-control short-date" 
+                               value="{{ personel[10].strftime('%Y-%m-%d') if personel[10] }}">
+                    </div>
+                    <!--<div class="form-group col-md-4">
+                        <label for="tmt_selesai_penempatan">TMT Selesai</label>
+                        <input type="date" name="tmt_selesai_penempatan" id="tmt_selesai_penempatan" class="form-control short-date" 
+                               value="{{ personel[14].strftime('%Y-%m-%d') if personel[14] }}">
+                    </div>-->
+                </div>
+
+                <div class="form-group">
+                    <label for="alamat">Alamat</label>
+                    <textarea name="alamat" id="alamat" class="form-control" rows="2">{{ personel[11] if personel[11] }}</textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="telp">Telepon</label>
+                        <input type="text" name="telp" id="telp" class="form-control" value="{{ personel[12] if personel[12] }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="form-control" value="{{ personel[13] if personel[13] }}">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ url_for('list_personel') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

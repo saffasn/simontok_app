@@ -1,0 +1,102 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Data Fungsional{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_fungsional') }}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="nama_fungsional">Jenis Fungsional</label>
+                        <select name="nama_fungsional" id="nama_fungsional" class="form-control" required>
+                            <option value="">-- Pilih Jenis Fungsional --</option>
+                            {% if jenis_fungsional_list %}
+                                {% for jenis in jenis_fungsional_list %}
+                                <option value="{{ jenis[0] }}">{{ jenis[1] }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="" disabled>Tidak ada data jenis fungsional</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="id_personel">Personel</label>
+                        <select name="id_personel" id="id_personel" class="form-control" required>
+                            <option value="">-- Pilih Personel --</option>
+                            {% if personel_list %}
+                                {% for personel in personel_list %}
+                                <option value="{{ personel[0] }}">{{ personel[1] }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="" disabled>Tidak ada data personel</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="nama_pendidikan">Pendidikan</label>
+                        <select name="nama_pendidikan" id="nama_pendidikan" class="form-control" required>
+                            <option value="">-- Pilih Pendidikan --</option>
+                            {% if pendidikan_list %}
+                                {% for pendidikan in pendidikan_list %}
+                                <option value="{{ pendidikan[0] }}" data-tahun="{{ pendidikan[2] }}">
+                                    {{ pendidikan[1] }} ({{ pendidikan[2] }})
+                                </option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="" disabled>Tidak ada data pendidikan</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="tahun_pendidikan">Tahun Pendidikan</label>
+                        <input type="text" name="tahun_pendidikan" id="tahun_pendidikan" class="form-control" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="jenjang">Jenjang</label>
+                        <select name="jenjang" id="jenjang" class="form-control">
+                            <option value="">-- Pilih Jenjang --</option>
+                            <option value="Pertama">Pertama</option>
+                            <option value="Muda">Muda</option>
+                            <option value="Madya">Madya</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="tmt_jenjang">TMT Jenjang</label>
+                        <input type="date" name="tmt_jenjang" id="tmt_jenjang" class="form-control short-date">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="no_sk">Nomor SK</label>
+                        <input type="text" name="no_sk" id="no_sk" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_fungsional') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-fill tahun pendidikan when pendidikan is selected
+    const pendidikanSelect = document.getElementById('nama_pendidikan');
+    const tahunPendidikanInput = document.getElementById('tahun_pendidikan');
+    
+    pendidikanSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        tahunPendidikanInput.value = selectedOption.dataset.tahun || '';
+    });
+});
+</script>
+{% endblock %}

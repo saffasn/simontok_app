@@ -1,0 +1,28 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Edit Jenis Fungsional{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('edit_jenis_fungsional', no=jenis_fungsional[0]) }}">
+                <div class="form-group">
+                    <label for="nama_fungsional">Nama Fungsional</label>
+                    <input type="text" 
+                           name="nama_fungsional" 
+                           id="nama_fungsional" 
+                           class="form-control" 
+                           value="{{ jenis_fungsional[1] }}" 
+                           required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ url_for('list_jenis_fungsional') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

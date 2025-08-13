@@ -1,0 +1,28 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Jenis Fungsional{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_jenis_fungsional') }}">
+                <div class="form-group">
+                    <label for="nama_fungsional">Nama Fungsional</label>
+                    <input type="text" 
+                           name="nama_fungsional" 
+                           id="nama_fungsional" 
+                           class="form-control" 
+                           required
+                           value="{{ form_data.nama_fungsional if form_data }}">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_jenis_fungsional') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

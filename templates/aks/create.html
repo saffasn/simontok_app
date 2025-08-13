@@ -1,0 +1,112 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Data AKS{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_aks') }}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="id_pwk">Perwakilan</label>
+                        <select name="id_pwk" id="id_pwk" class="form-control" required>
+                            {% for pwk in perwakilan_list %}
+                            <option value="{{ pwk[0] }}"
+                                {% if form_data and form_data.id_pwk == pwk[0] %}selected{% endif %}>
+                                {{ pwk[1] }} ({{ pwk[0] }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="id_personel">Personel</label>
+                        <select name="id_personel" id="id_personel" class="form-control">
+                            <option value="">-- Pilih Personel --</option>
+                            {% for personel in personel_list %}
+                            <option value="{{ personel[0] }}"
+                                {% if form_data and form_data.id_personel == personel[0]|string %}selected{% endif %}>
+                                {{ personel[1] }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="aks">AKS</label>
+                        <input type="text" name="aks" id="aks" class="form-control" required
+                               value="{{ form_data.aks if form_data }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="tgl_penggantian">Tanggal Penggantian</label>
+                        <input type="date" name="tgl_penggantian" id="tgl_penggantian" class="form-control short-date" required
+                               value="{{ form_data.tgl_penggantian if form_data }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="1" {% if not form_data or (form_data and form_data.status == '1') %}selected{% endif %}>Sedang Berlaku</option>
+                            <option value="0" {% if form_data and form_data.status == '0' %}selected{% endif %}>Telah Berlaku</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="no_berita">No. Berita</label>
+                        <input type="text" name="no_berita" id="no_berita" class="form-control"
+                               value="{{ form_data.no_berita if form_data }}">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_aks') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update personel dropdown when perwakilan changes
+    const perwakilanSelect = document.getElementById('id_pwk');
+    const personelSelect = document.getElementById('id_personel');
+    
+    if (perwakilanSelect && personelSelect) {
+        perwakilanSelect.addEventListener('change', function() {
+            const trigram = this.value;
+            
+            // If admin, we need to fetch personel via AJAX
+            {% if session.get('role') == 0 %}
+                if (trigram) {
+                    fetch(`/api/personel?trigram=${trigram}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            personelSelect.innerHTML = '<option value="">-- Pilih Personel --</option>';
+                            data.forEach(personel => {
+                                const option = document.createElement('option');
+                                option.value = personel.no;
+                                option.textContent = `${personel.nama} - ${personel.nama_perwakilan}`;
+                                personelSelect.appendChild(option);
+                            });
+                        });
+                } else {
+                    // Reset to all options if no perwakilan selected
+                    personelSelect.innerHTML = '<option value="">-- Pilih Personel --</option>';
+                    {% for personel in personel_list %}
+                        const option = document.createElement('option');
+                        option.value = '{{ personel[0] }}';
+                        option.textContent = '{{ personel[1] }} - {{ personel[2] }}';
+                        personelSelect.appendChild(option);
+                    {% endfor %}
+                }
+            {% endif %}
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Edit Data AKS{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('edit_aks', no=aks[0]) }}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="id_pwk">Perwakilan</label>
+                        <select name="id_pwk" id="id_pwk" class="form-control" required>
+                            {% for pwk in perwakilan_list %}
+                            <option value="{{ pwk[0] }}"
+                                {% if aks[7] == pwk[0] %}selected{% endif %}>
+                                {{ pwk[1] }} ({{ pwk[0] }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="id_personel">Personel</label>
+                        <select name="id_personel" id="id_personel" class="form-control">
+                            <option value="">-- Pilih Personel --</option>
+                            {% for personel in personel_list %}
+                            <option value="{{ personel[0] }}"
+                                {% if aks[5] == personel[0] %}selected{% endif %}>
+                                {{ personel[1] }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="aks">AKS</label>
+                        <input type="text" name="aks" id="aks" class="form-control" required
+                               value="{{ aks[1] }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="tgl_penggantian">Tanggal Penggantian</label>
+                        <input type="date" name="tgl_penggantian" id="tgl_penggantian" class="form-control" required
+                               value="{{ aks[2].strftime('%Y-%m-%d') if aks[2] }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="1" {% if aks[3] %}selected{% endif %}>Sedang Berlaku</option>
+                            <option value="0" {% if not aks[3] %}selected{% endif %}>Telah Berlaku</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="no_berita">No. Berita</label>
+                        <input type="text" name="no_berita" id="no_berita" class="form-control"
+                               value="{{ aks[4] if aks[4] }}">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ url_for('list_aks') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update personel dropdown when perwakilan changes
+    const perwakilanSelect = document.getElementById('id_pwk');
+    const personelSelect = document.getElementById('id_personel');
+    
+    if (perwakilanSelect && personelSelect) {
+        perwakilanSelect.addEventListener('change', function() {
+            const trigram = this.value;
+            
+            // If admin, we need to fetch personel via AJAX
+            {% if session.get('role') == 0 %}
+                if (trigram) {
+                    fetch(`/api/personel?trigram=${trigram}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            personelSelect.innerHTML = '<option value="">-- Pilih Personel --</option>';
+                            data.forEach(personel => {
+                                const option = document.createElement('option');
+                                option.value = personel.no;
+                                option.textContent = `${personel.nama} - ${personel.nama_perwakilan}`;
+                                personelSelect.appendChild(option);
+                            });
+                            
+                            // Re-select the current personel if they belong to the new perwakilan
+                            const currentPersonelId = '{{ aks[5] }}';
+                            if (currentPersonelId && data.some(p => p.no == currentPersonelId)) {
+                                personelSelect.value = currentPersonelId;
+                            }
+                        });
+                } else {
+                    // Reset to all options if no perwakilan selected
+                    personelSelect.innerHTML = '<option value="">-- Pilih Personel --</option>';
+                    {% for personel in personel_list %}
+                        const option = document.createElement('option');
+                        option.value = '{{ personel[0] }}';
+                        option.textContent = '{{ personel[1] }} - {{ personel[2] }}';
+                        personelSelect.appendChild(option);
+                    {% endfor %}
+                    
+                    // Re-select the current personel
+                    const currentPersonelId = '{{ aks[5] }}';
+                    if (currentPersonelId) {
+                        personelSelect.value = currentPersonelId;
+                    }
+                }
+            {% endif %}
+        });
+    }
+});
+</script>
+{% endblock %}

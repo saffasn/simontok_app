@@ -1,0 +1,121 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Edit Data Fungsional{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('edit_fungsional', no=fungsional[0]) }}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="nama_fungsional">Jenis Fungsional</label>
+                        <select name="nama_fungsional" id="nama_fungsional" class="form-control" required>
+                            <option value="">-- Pilih Jenis Fungsional --</option>
+                            {% if jenis_fungsional_list %}
+                                {% for jenis in jenis_fungsional_list %}
+                                <option value="{{ jenis[0] }}" 
+                                    {% if fungsional[1] == jenis[0] %}selected{% endif %}>
+                                    {{ jenis[1] }}
+                                </option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="" disabled>Tidak ada data jenis fungsional</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="id_personel">Personel</label>
+                        <select name="id_personel" id="id_personel" class="form-control" required>
+                            <option value="">-- Pilih Personel --</option>
+                            {% if personel_list %}
+                                {% for personel in personel_list %}
+                                <option value="{{ personel[0] }}" 
+                                    {% if fungsional[7] == personel[0] %}selected{% endif %}>
+                                    {{ personel[1] }}
+                                </option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="" disabled>Tidak ada data personel</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="nama_pendidikan">Pendidikan</label>
+                        <select name="nama_pendidikan" id="nama_pendidikan" class="form-control" required>
+                            <option value="">-- Pilih Pendidikan --</option>
+                            {% if pendidikan_list %}
+                                {% for pendidikan in pendidikan_list %}
+                                <option value="{{ pendidikan[0] }}" 
+                                    data-tahun="{{ pendidikan[2] }}"
+                                    {% if fungsional[2] == pendidikan[0] %}selected{% endif %}>
+                                    {{ pendidikan[1] }} ({{ pendidikan[2] }})
+                                </option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="" disabled>Tidak ada data pendidikan</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="tahun_pendidikan">Tahun Pendidikan</label>
+                        <input type="text" name="tahun_pendidikan" id="tahun_pendidikan" 
+                               class="form-control" readonly 
+                               value="{{ fungsional[3] if fungsional[3] }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="jenjang">Jenjang</label>
+                        <select name="jenjang" id="jenjang" class="form-control">
+                            <option value="">-- Pilih Jenjang --</option>
+                            <option value="Pertama" {% if fungsional[4] == 'Pertama' %}selected{% endif %}>Pertama</option>
+                            <option value="Muda" {% if fungsional[4] == 'Muda' %}selected{% endif %}>Muda</option>
+                            <option value="Madya" {% if fungsional[4] == 'Madya' %}selected{% endif %}>Madya</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="tmt_jenjang">TMT Jenjang</label>
+                        <input type="date" name="tmt_jenjang" id="tmt_jenjang" 
+                               class="form-control short-date"
+                               value="{{ fungsional[5].strftime('%Y-%m-%d') if fungsional[5] }}">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="no_sk">Nomor SK</label>
+                        <input type="text" name="no_sk" id="no_sk" class="form-control"
+                               value="{{ fungsional[6] if fungsional[6] }}">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ url_for('list_fungsional') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-fill tahun pendidikan when pendidikan is selected
+    const pendidikanSelect = document.getElementById('nama_pendidikan');
+    const tahunPendidikanInput = document.getElementById('tahun_pendidikan');
+    
+    pendidikanSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        tahunPendidikanInput.value = selectedOption.dataset.tahun || '';
+    });
+
+    // Initialize tahun pendidikan if pendidikan is already selected
+    if (pendidikanSelect.selectedIndex > 0) {
+        const selectedOption = pendidikanSelect.options[pendidikanSelect.selectedIndex];
+        tahunPendidikanInput.value = selectedOption.dataset.tahun || '';
+    }
+});
+</script>
+{% endblock %}

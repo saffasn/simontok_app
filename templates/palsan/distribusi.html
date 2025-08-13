@@ -1,0 +1,75 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Distribusi Palsan{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('distribusi_palsan') }}">
+                <div class="form-group">
+                    <label for="id_tipe">Tipe Palsan</label>
+                    <select class="form-control" id="id_tipe" name="id_tipe" required
+                            onchange="this.form.action='{{ url_for('distribusi_palsan') }}?tipe='+this.value; this.form.submit()">
+                        <option value="">-- Pilih Tipe Palsan --</option>
+                        {% for tipe in tipe_palsan_list %}
+                        <option value="{{ tipe[0] }}" {% if selected_tipe == tipe[0]|string %}selected{% endif %}>
+                            {{ tipe[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="serial_number">Serial Number</label>
+                    <select class="form-control" id="serial_number" name="serial_number" required>
+                        <option value="">-- Pilih Serial Number --</option>
+                        {% for sn in serial_numbers %}
+                        <option value="{{ sn[0] }}">{{ sn[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="satker_peminjam">Satker Peminjam</label>
+                    <select class="form-control" id="satker_peminjam" name="satker_peminjam" required>
+                        <option value="">-- Pilih Satker --</option>
+                        {% for satker in satker_list %}
+                        <option value="{{ satker }}">{{ satker }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nama_peminjam">Nama Peminjam</label>
+                    <input type="text" class="form-control" id="nama_peminjam" name="nama_peminjam" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nip_peminjam">NIP Peminjam</label>
+                    <input type="text" class="form-control" id="nip_peminjam" name="nip_peminjam" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nip_peminjam">Satker Yang Menyerahkan</label>
+                    <input type="text" class="form-control" id="nip_peminjam" name="nip_peminjam" value="Staff Pokja Persandian Diplomatik" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="penyerah">Nama Yang Menyerahkan</label>
+                    <input type="text" class="form-control" id="penyerah" name="penyerah">
+                </div>
+
+                <div class="form-group">
+                    <label for="nip_penyerah">NIP Yang Menyerahkan</label>
+                    <input type="text" class="form-control" id="nip_penyerah" name="nip_penyerah">
+                </div>
+
+                <button type="submit" class="btn btn-primary" name="action" value="save">Simpan</button>
+                <button type="submit" class="btn btn-primary" name="action" value="print">Simpan & Cetak PDF</button>
+                <a href="{{ url_for('list_palsan') }}" class="btn btn-secondary">Kembali</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

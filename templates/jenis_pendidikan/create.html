@@ -1,0 +1,32 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Jenis Pendidikan{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_jenis_pendidikan') }}">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="jenis_pend">Jenis Pendidikan</label>
+                        <select name="jenis_pend" id="jenis_pend" class="form-control" required>
+                            <option value="">-- Pilih Jenis Pendidikan --</option>
+                            <option value="umum">Umum</option>
+                            <option value="militer">Militer</option>
+                            <option value="pim">PIM</option>
+                            <option value="sandi">Sandi</option>
+                            <option value="teknis">Teknis</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_jenis_pendidikan') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Edit Data Palsan{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-row">
+                    <!-- ID Palsan (readonly) -->
+                    <div class="form-group col-md-6">
+                        <label>ID Palsan</label>
+                        <div class="form-control-static">{{ palsan[0] }}</div>
+                    </div>
+                    
+                    <!-- Serial Number -->
+                    <div class="form-group col-md-6">
+                        <label for="serial_number">Serial Number *</label>
+                        <input type="text" name="serial_number" id="serial_number" 
+                               class="form-control" required value="{{ palsan[3] }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <!-- Perwakilan -->
+                    <div class="form-group col-md-6">
+                        <label for="id_pwk">Perwakilan *</label>
+                        <select name="id_pwk" id="id_pwk" class="form-control" required>
+                            <option value="">-- Pilih Perwakilan --</option>
+                            {% for pwk in perwakilan_list %}
+                            <option value="{{ pwk[0] }}" 
+                                {% if palsan[4] == pwk[0] %}selected{% endif %}>
+                                {{ pwk[1] }} ({{ pwk[0] }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Tipe Palsan -->
+                    <div class="form-group col-md-6">
+                        <label for="id_tipe">Tipe Palsan *</label>
+                        <select name="id_tipe" id="id_tipe" class="form-control" required>
+                            <option value="">-- Pilih Tipe --</option>
+                            {% for tipe in tipe_palsan_list %}
+                            <option value="{{ tipe[0] }}" 
+                                {% if palsan[6] == tipe[0] %}selected{% endif %}>
+                                {{ tipe[1] }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <!-- Pengadaan -->
+                    <div class="form-group col-md-6">
+                        <label for="pengadaan">Pengadaan</label>
+                        <input type="text" name="pengadaan" id="pengadaan" 
+                               class="form-control" value="{{ palsan[7] }}">
+                    </div>
+                    
+                    <!-- Tahun Pengadaan -->
+                    <div class="form-group col-md-6">
+                        <label for="tahun_pengadaan">Tahun Pengadaan</label>
+                        <input type="date" name="tahun_pengadaan" id="tahun_pengadaan" 
+                               class="form-control" value="{{ palsan[8] }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <!-- Status -->
+                    <div class="form-group col-md-6">
+                        <label for="status">Status *</label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="Aktif" {% if palsan[2] == 'Aktif' %}selected{% endif %}>Aktif</option>
+                            <option value="Non-Aktif" {% if palsan[2] == 'Non-Aktif' %}selected{% endif %}>Non-Aktif</option>
+                            <option value="Maintenance" {% if palsan[2] == 'Maintenance' %}selected{% endif %}>Maintenance</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="material-icons">save</i> Simpan Perubahan
+                    </button>
+                    <a href="{{ url_for('list_palsan') }}" class="btn btn-secondary">
+                        <i class="material-icons">cancel</i> Batal
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

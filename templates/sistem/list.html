@@ -1,0 +1,138 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Data Sistem{% endblock %}
+
+{% block content %}
+<div class="perwakilan-container">
+    <div class="card">
+        <div class="card-body">
+            <!-- Search and Add Button Section -->
+            <div class="search-action-container">
+                <form method="GET" action="{{ url_for('list_sistem') }}" class="search-form">
+                    <input type="text" 
+                           name="search" 
+                           placeholder="Cari Data Sistem..." 
+                           class="search-input"
+                           value="{{ search if search }}">
+                    <button type="submit" class="search-button">
+                        <i class="material-icons">search</i>
+                    </button>
+                </form>
+                <a href="{{ url_for('create_sistem') }}" class="btn btn-add">
+                    <i class="material-icons">add</i> Tambah Data
+                </a>
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="export-buttons">
+                        <a href="{{ url_for('export_sistem_pdf', search=search, sort=sort_column, dir=sort_direction) }}">
+                            <button class="btn-export btn-pdf">
+                                <i class="material-icons">picture_as_pdf</i> PDF
+                            </button>
+                        </a>
+                        <a href="{{ url_for('export_sistem_excel', search=search, sort=sort_column, dir=sort_direction) }}">
+                            <button class="btn-export btn-excel">
+                                <i class="material-icons">grid_on</i> Excel
+                            </button>
+                        </a>
+                    </div>
+            
+            <!-- Data Table with Pagination -->
+            <div class="table-responsive">
+                <table class="perwakilan-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tahun</th>
+                            <th>Jenis Sistem</th>
+                            <th>Nomor Sistem</th>
+                            <th>Nama Sistem</th>
+                            <th>Lembar</th>
+                            <th>Status</th>
+                            <th>No. Urut</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if sistem_list %}
+                            {% for item in sistem_list %}
+                            <tr>
+                                <td>{{ item[0] }}</td>
+                                <td>{{ item[1] }}</td>
+                                <td>{{ item[2] }}</td>
+                                <td>{{ item[3] if item[3] else '-' }}</td>
+                                <td>{{ item[4] if item[4] else '-' }}</td>
+                                <td>{{ item[5] if item[5] else '-' }}</td>
+                                <td>
+                                    {% if item[6] == 0 %}
+                                        <span class="badge badge-secondary">0</span>
+                                    {% elif item[6] == 1 %}
+                                        <span class="badge badge-success">1</span>
+                                    {% elif item[6] == 2 %}
+                                        <span class="badge badge-info">2</span>
+                                    {% else %}
+                                        {{ item[6] }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ item[7] if item[7] else '-' }}</td>
+                                <td class="actions">
+                                    <a href="{{ url_for('edit_sistem', id_sistem=item[0]) }}" class="btn-edit">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                    <form action="{{ url_for('delete_sistem', id_sistem=item[0]) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn-delete" onclick="return confirm('Hapus data ini?')">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    Tidak ada data sistem
+                                    {% if search %} untuk pencarian "{{ search }}"{% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    Showing {{ (page - 1) * per_page + 1 }} to {{ [page * per_page, total]|min }} of {{ total }} entries
+                </div>
+                <div class="pagination-controls">
+                    {% if page > 1 %}
+                        <a href="{{ url_for('list_sistem', page=page-1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                            Previous
+                        </a>
+                    {% else %}
+                        <span class="pagination-button disabled">Previous</span>
+                    {% endif %}
+
+                    {% for p in range(1, total_pages + 1) %}
+                        {% if p == page %}
+                            <span class="pagination-button active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('list_sistem', page=p, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                                {{ p }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                        <a href="{{ url_for('list_sistem', page=page+1, search=search, sort=sort_column, dir=sort_direction) }}" class="pagination-button">
+                            Next
+                        </a>
+                    {% else %}
+                        <span class="pagination-button disabled">Next</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

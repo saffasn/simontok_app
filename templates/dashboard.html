@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMONTOK - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/perwakilan.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
@@ -24,31 +24,134 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
+
+                   {% if session.get('role') == 0 %}
+                    <ul class="master-menu {% if 'list_jabatan' in request.path or 'list_jenis_pendidikan' in request.path or 'list_jenis_fungsional' in request.path %}active open{% endif %}">
+                        <a href="#" class="menu-toggle">
+                            <span class="material-icons">settings</span>
+                            <span>Master</span>
+                            <span class="material-icons dropdown-icon">expand_more</span>
+                        </a>
+                        <ul class="submenu">
+                            <li class="{% if request.path == url_for('list_jenis_pendidikan') %}active{% endif %}">
+                                <a href="{{ url_for('list_jenis_pendidikan') }}">
+                                    <span class="material-icons">school</span>
+                                    <span>Jenis Pendidikan</span>
+                                </a>
+                            </li>
+                            <li class="{% if request.path == url_for('list_jenis_fungsional') %}active{% endif %}">
+                                <a href="{{ url_for('list_jenis_fungsional') }}">
+                                    <span class="material-icons">category</span>
+                                    <span>Jenis Fungsional</span>
+                                </a>
+                            </li>
+                            
+                            <li class="{% if request.path == url_for('list_jenis_sistem') %}active{% endif %}">
+                                <a href="{{ url_for('list_jenis_sistem') }}">
+                                    <span class="material-icons">dns</span>
+                                    <span>Jenis Sistem</span>
+                                </a>
+                            </li>
+                            <li class="{% if request.path == url_for('list_kategori_sistem') %}active{% endif %}">
+                                <a href="{{ url_for('list_kategori_sistem') }}">
+                                    <span class="material-icons">layers</span>
+                                    <span>Kategori Sistem</span>
+                                </a>
+                            </li>
+                            <li class="{% if request.path == url_for('list_tipe_palsan') %}active{% endif %}">
+                                <a href="{{ url_for('list_tipe_palsan') }}">
+                                    <span class="material-icons">category</span>
+                                    <span>Tipe Palsan</span>
+                                </a>
+                            </li>
+                            <li class="{% if request.path == url_for('list_jabatan') %}active{% endif %}">
+                                <a href="{{ url_for('list_jabatan') }}">
+                                    <span class="material-icons">work_outline</span>
+                                    <span>Jabatan</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </ul>
+                    {% endif %}
+
+                    <!-- Common menu items for all users -->
+                    <li class="{% if request.path == url_for('list_kepri') %}active{% endif %}">
+                        <a href="{{ url_for('list_kepri') }}">
+                            <span class="material-icons">table_chart</span>
+                            <span>Keppri</span>
+                        </a>
+                    </li>
+                    <li class="{% if request.path == url_for('list_personel') %}active{% endif %}">
+                        <a href="{{ url_for('list_personel') }}">
+                            <span class="material-icons">people</span>
+                            <span>Personel</span>
+                        </a>
+                    </li>
+                    <li class="{% if request.path == url_for('list_pendidikan') %}active{% endif %}">
+                        <a href="{{ url_for('list_pendidikan') }}">
+                            <span class="material-icons">menu_book</span>
+                            <span>Pendidikan</span>
+                        </a>
+                    </li>
+                    <li class="{% if request.path == url_for('list_fungsional') %}active{% endif %}">
+                        <a href="{{ url_for('list_fungsional') }}">
+                            <span class="material-icons">work</span>
+                            <span>Fungsional</span>
+                        </a>
+                    </li>
+                    <li class="{% if request.path == url_for('list_aks') %}active{% endif %}">
+                        <a href="{{ url_for('list_aks') }}">
+                            <span class="material-icons">vpn_key</span>
+                            <span>AKS</span>
+                        </a>
+                    </li>
+
+                    <li class="{% if request.path == url_for('list_pegawai_setempat') %}active{% endif %}">
+                        <a href="{{ url_for('list_pegawai_setempat') }}">
+                            <span class="material-icons">person</span>
+                            <span>Pegawai Setempat</span>
+                        </a>
+                    </li>
+
+                    <li class="{% if request.path == url_for('list_alkom') %}active{% endif %}">
+                        <a href="{{ url_for('list_alkom') }}">
+                            <span class="material-icons">devices</span>
+                            <span>Alkom</span>
+                        </a>
+                    </li>
+                    
+                    <li class="{% if request.path == url_for('list_palsan') %}active{% endif %}">
+                        <a href="{{ url_for('list_palsan') }}">
+                            <span class="material-icons">extension</span>
+                            <span>Palsan</span>
+                        </a>
+                    </li>
+
+                    
+                    <!-- Admin-only menu items -->
+                    {% if session.get('role') == 0 %}
+                    <li class="{% if request.path == url_for('list_sistem') %}active{% endif %}">
+                        <a href="{{ url_for('list_sistem') }}">
+                            <span class="material-icons">settings_suggest</span>
+                            <span>Sistem</span>
+                        </a>
+                    </li>
                     <li class="{% if request.path == url_for('list_perwakilan') %}active{% endif %}">
                         <a href="{{ url_for('list_perwakilan') }}">
                             <span class="material-icons">account_balance</span>
                             <span>Data Perwakilan</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ url_for('list_kepri') }}">
-                            <span class="material-icons">table_chart</span>
-                            <span>Tabel Kepri</span>
+                    <li class="{% if request.path == url_for('list_pengguna') %}active{% endif %}">
+                        <a href="{{ url_for('list_pengguna') }}">
+                            <span class="material-icons">manage_accounts</span>
+                            <span>Pengguna</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <span class="material-icons">people</span>
-                            <span>Tabel Personel</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="material-icons">person</span>
-                            <span>Tabel Pegawai Setempat</span>
-                        </a>
-                    </li>
-                    <li>
+                    {% endif %}
+                    
+                    <!-- Logout for all users -->
+                    <li class="{% if request.path == url_for('logout') %}active{% endif %}">
                         <a href="{{ url_for('logout') }}">
                             <span class="material-icons">logout</span>
                             <span>Logout</span>
@@ -60,6 +163,7 @@
 
         <!-- Main Content -->
         <div class="main-content">
+
             <header class="main-header">
                 <h1>{% block title %}Dashboard{% endblock %}</h1>
                 <div class="user-profile">
@@ -85,5 +189,22 @@
             </main>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const masterMenu = document.querySelector('.master-menu');
+            const menuToggle = masterMenu.querySelector('.menu-toggle');
+            
+            menuToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                masterMenu.classList.toggle('open');
+            });
+            
+            // Open the menu if any of its subitems is active
+            if (masterMenu.classList.contains('active')) {
+                masterMenu.classList.add('open');
+            }
+        });
+    </script>
 </body>
 </html>

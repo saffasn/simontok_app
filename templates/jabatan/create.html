@@ -1,0 +1,28 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Data Jabatan{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_jabatan') }}">
+                <div class="form-group">
+                    <label for="nama">Nama Jabatan</label>
+                    <input type="text" name="nama" id="nama" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="singkatan">Singkatan</label>
+                    <input type="text" name="singkatan" id="singkatan" class="form-control">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_jabatan') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Data Tipe Palsan{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_tipe_palsan') }}">
+                <div class="form-row">
+                    <!-- Nama Tipe -->
+                    <div class="form-group col-md-12">
+                        <label for="nama">Nama Tipe Palsan</label>
+                        <input type="text" name="nama" id="nama" class="form-control" required
+                               value="{{ form_data.nama if form_data else '' }}"
+                               placeholder="Masukkan nama tipe palsan">
+                    </div>
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_jenis_sistem') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

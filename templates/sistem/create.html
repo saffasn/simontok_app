@@ -1,0 +1,89 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Tambah Data Sistem{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('create_sistem') }}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="tahun">Tahun</label>
+                        <input type="number" name="tahun" id="tahun" class="form-control" required
+                               value="{{ form_data.tahun if form_data }}" min="2000" max="2100">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="id_jenis">Jenis Sistem</label>
+                        <select name="id_jenis" id="id_jenis" class="form-control" required>
+                            <option value="">-- Pilih Jenis Sistem --</option>
+                            {% for jenis in jenis_list %}
+                            <option value="{{ jenis[0] }}"
+                                {% if form_data and form_data.id_jenis == jenis[0] %}selected{% endif %}>
+                                {{ jenis[1] }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="no_sistem">Nomor Sistem</label>
+                        <input type="text" name="no_sistem" id="no_sistem" class="form-control" required
+                               value="{{ form_data.no_sistem if form_data }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="nama_sistem">Nama Sistem</label>
+                        <input type="text" name="nama_sistem" id="nama_sistem" class="form-control"
+                               value="{{ form_data.nama_sistem if form_data }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="jml_lembar">Jumlah Lembar</label>
+                        <input type="number" name="jml_lembar" id="jml_lembar" class="form-control"
+                               value="{{ form_data.jml_lembar if form_data }}" min="0">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control">
+                            {% for value, label in status_options %}
+                            <option value="{{ value }}"
+                                {% if form_data and form_data.status == value|string %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="no_urut">Nomor Urut</label>
+                        <input type="number" name="no_urut" id="no_urut" class="form-control"
+                               value="{{ form_data.no_urut if form_data }}" min="0">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ url_for('list_sistem') }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // You can add any JavaScript validation here if needed
+    // For example, to validate the tahun field:
+    const tahunInput = document.getElementById('tahun');
+    tahunInput.addEventListener('change', function() {
+        if (this.value < 2000 || this.value > 2100) {
+            alert('Tahun harus antara 2000 dan 2100');
+            this.value = '';
+        }
+    });
+});
+</script>
+{% endblock %}
